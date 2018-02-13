@@ -6,6 +6,7 @@ const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
 const outputDir = process.env.NODE_ENV === 'development' ? 'dev' : 'build';
 
 module.exports = {
+  devtool: process.env.NODE_ENV === 'development' ? 'cheap-module-source-map' : 'source-map',
   entry: {
     'content-script': './src/contentScript.js',
     background: './src/background.js'
@@ -13,6 +14,15 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, outputDir),
     filename: '[name].js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: 'babel-loader'
+      }
+    ]
   },
   plugins: [
     process.env.NODE_ENV === 'development' ?

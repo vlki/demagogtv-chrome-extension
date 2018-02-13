@@ -1,7 +1,14 @@
+# Dependencies
 node_modules
 
 # Chrome loads this directory in development mode as unpacked extension
 dev
 
-# Directory we
+# Production build
 build
+
+# Misc
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

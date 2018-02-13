@@ -3,7 +3,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log('from a content script: ' + sender.tab.url)
   } else {
     console.log('from the extension')
-
   }
 
   if (request.greeting == 'hello') {
