@@ -38,5 +38,5 @@ module.exports = {
     new CopyWebpackPlugin([{
       from: './public'
     }])
-  ]
+  ].filter(Boolean)
 };

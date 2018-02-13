@@ -7,6 +7,12 @@ dev
 # Production build
 build
 
+# Signing key for the Chrome extension
+key.pem
+
+# Compressed Chrome extension
+*.crx
+
 # Misc
 .DS_Store
 npm-debug.log*
