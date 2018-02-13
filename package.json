@@ -1,0 +1,12 @@
+{
+  "name": "demagog-chrome-extension",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "NODE_ENV=development webpack --config webpack.config.js --watch"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.4.1",
+    "webpack": "^3.11.0",
+    "webpack-chrome-extension-reloader": "^0.7.0"
+  }
+}

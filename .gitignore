@@ -1,0 +1,7 @@
+node_modules
+
+# Chrome loads this directory in development mode as unpacked extension
+dev
+
+# Directory we
+build

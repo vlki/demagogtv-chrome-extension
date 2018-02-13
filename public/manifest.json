@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Demagog.cz Chrome Extension",
+  "description": "",
+  "version": "1.0.0",
+  "icons": {
+    "128": "icon128.png"
+  },
+  "browser_action": {
+    "default_icon": "icon128.png"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content-script.js"
+      ]
+    }
+  ]
+}
