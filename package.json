@@ -7,7 +7,7 @@
     "build-webpack": "NODE_ENV=production webpack --config webpack.config.js",
     "build-compress": "node scripts/compress.js",
     "generate-signing-key": "crx keygen",
-    "clean": "rimraf build/ dev/ *.crx"
+    "clean": "rimraf build/ dev/ *.crx *.zip"
   },
   "devDependencies": {
     "apollo-fetch": "^0.7.0",
