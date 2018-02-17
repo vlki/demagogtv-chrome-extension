@@ -70,15 +70,3 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // To be able to use async sendResponse
   return true
 })
-
-
-let statementsWithTimings = data.data.article.statements.reduce((carry, statement) => {
-  if (timings[statement.id]) {
-    carry.push(Object.assign({}, statement, {
-      highlightStart: timings[statement.id].start,
-      highlightEnd: timings[statement.id].end
-    }))
-  }
-
-  return carry
-}, [])

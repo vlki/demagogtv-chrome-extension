@@ -68,6 +68,7 @@ class StatementsPanel extends Component {
         <StatementsContainer innerRef={el => { this.statementsContainerEl = el }}>
           {article.statements.map(statement =>
             <StatementContainer
+              key={statement.id}
               innerRef={el => { this.statementEls[statement.id] = el }}
               highlight={statement.id === highlightStatement}
             >
