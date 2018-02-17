@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Demagog.cz Chrome Extension",
-  "description": "",
-  "version": "1.0.0",
+  "name": "DemagogTV",
+  "version": "1.0.1",
+  "description": "Sledujte rozhovor a zároveň, zda politik říká pravdu či ne. Videozáznamy debat propojené s hodnocením výroků od Demagog.cz.",
   "icons": {
     "128": "icon128.png"
   },

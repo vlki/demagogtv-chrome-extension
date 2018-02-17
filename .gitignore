@@ -12,6 +12,7 @@ key.pem
 
 # Compressed Chrome extension
 *.crx
+*.zip
 
 # Misc
 .DS_Store
