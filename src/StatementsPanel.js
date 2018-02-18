@@ -4,6 +4,13 @@ import styled from 'styled-components'
 import VeracityIcon from './VeracityIcon'
 import { parseTime } from './utils'
 
+const VERACITY_COLORS = {
+  'true': '#0060FF',
+  'untrue': '#EB1D2B',
+  'misleading': '#FFBA00',
+  'unverifiable': '#9DBAEB'
+}
+
 class StatementsPanel extends Component {
   statementsContainerEl = null
   statementEls = {}
@@ -14,6 +21,9 @@ class StatementsPanel extends Component {
     this.player = document.getElementById('video')
 
     this.state = {
+      filter: null,
+      // filter: { speakerId: '433', veracityKey: 'true' },
+      filteredStatements: props.article.statements,
       time: this.player.currentTime,
       highlightStatement: null
     }
@@ -59,9 +69,36 @@ class StatementsPanel extends Component {
     this.player.play()
   }
 
+  handleStatClick = (speakerId, veracityKey) => {
+    const { article } = this.props
+    const { filter } = this.state
+
+    let newFilter
+    if (filter && filter.speakerId === speakerId && filter.veracityKey === veracityKey) {
+      newFilter = null
+    } else {
+      newFilter = { speakerId, veracityKey }
+    }
+
+    this.setState({
+      filter: newFilter,
+      filteredStatements: filterStatements(article.statements, newFilter)
+    })
+  }
+
   render() {
     const { article } = this.props
-    const { highlightStatement } = this.state
+    const { filter, filteredStatements, highlightStatement } = this.state
+
+    let stats = article.speakers.reduce((carry, speaker) => {
+      carry[speaker.id] = { 'true': 0, untrue: 0, misleading: 0, unverifiable: 0 }
+      return carry
+    }, {})
+
+    stats = article.statements.reduce((carry, statement) => {
+      carry[statement.speaker.id][statement.assessment.veracity.key] += 1
+      return carry
+    }, stats)
 
     return (
       <Container>
@@ -73,28 +110,23 @@ class StatementsPanel extends Component {
             <SpeakerTextContainer>
               <SpeakerName>{speaker.first_name + ' ' + speaker.last_name}</SpeakerName>
               <SpeakerStats>
-                <SpeakerStatButton>
-                  <VeracityIcon veracityKey="true" />
-                  <VeracityNumber>1</VeracityNumber>
-                </SpeakerStatButton>
-                <SpeakerStatButton>
-                  <VeracityIcon veracityKey="untrue" />
-                  <VeracityNumber>1</VeracityNumber>
-                </SpeakerStatButton>
-                <SpeakerStatButton>
-                  <VeracityIcon veracityKey="misleading" />
-                  <VeracityNumber>1</VeracityNumber>
-                </SpeakerStatButton>
-                <SpeakerStatButton>
-                  <VeracityIcon veracityKey="unverifiable" />
-                  <VeracityNumber>1</VeracityNumber>
-                </SpeakerStatButton>
+                {['true', 'untrue', 'misleading', 'unverifiable'].map(veracityKey =>
+                  <SpeakerStatButton
+                    key={veracityKey}
+                    onClick={() => this.handleStatClick(speaker.id, veracityKey)}
+                    active={!filter || (filter.speakerId === speaker.id && filter.veracityKey === veracityKey)}
+                    veracityKey={veracityKey}
+                  >
+                    <VeracityIcon veracityKey={veracityKey} />
+                    <SpeakerStatNumber>{stats[speaker.id][veracityKey]}</SpeakerStatNumber>
+                  </SpeakerStatButton>
+                )}
               </SpeakerStats>
             </SpeakerTextContainer>
           </SpeakerContainer>
         )}
         <StatementsContainer innerRef={el => { this.statementsContainerEl = el }}>
-          {article.statements.map(statement =>
+          {filteredStatements.map(statement =>
             <StatementContainer
               key={statement.id}
               innerRef={el => { this.statementEls[statement.id] = el }}
@@ -175,13 +207,26 @@ const SpeakerStatButton = styled.button`
   font-family: Verdana, Arial, sans-serif;
   text-align: left;
 
+  &:focus { outline: none; }
+
+  svg path {
+    fill: ${props => props.active ? VERACITY_COLORS[props.veracityKey] : '#C1C1C1'};;
+  }
+
+  color: ${props => props.active ? '#000000' : '#C1C1C1'};
+
   &:hover {
     text-decoration: underline;
     cursor: pointer;
+    color: #000000;
+
+    svg path {
+      fill: ${props => VERACITY_COLORS[props.veracityKey]};
+    }
   }
 `
 
-const VeracityNumber = styled.span`
+const SpeakerStatNumber = styled.span`
   display: inline-block;
   width: 20px;
   padding-left: 4px;
@@ -258,6 +303,9 @@ const StatementResultExplanationWrapper = styled.div`
 `
 
 const StatementResultIcon = styled(VeracityIcon)`
+  svg path {
+    fill: ${props => VERACITY_COLORS[props.veracityKey]};
+  }
 `
 
 const StatementResult = styled.span`
@@ -297,5 +345,16 @@ const DemagogLogoLink = styled.a`
   display: block;
   margin-top: 10px;
 `
+
+const filterStatements = (allStatements, filter) => {
+  if (!filter) {
+    return allStatements
+  }
+
+  return allStatements.filter(statement => {
+    return statement.speaker.id === filter.speakerId
+      && statement.assessment.veracity.key === filter.veracityKey
+  })
+}
 
 export default StatementsPanel

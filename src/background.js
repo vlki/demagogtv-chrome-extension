@@ -42,6 +42,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         id,
         content,
         speaker {
+          id,
           first_name,
           last_name
         },
