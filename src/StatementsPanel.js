@@ -144,7 +144,9 @@ class StatementsPanel extends Component {
                 />
                 <StatementResultExplanationWrapper>
                   <StatementResultIcon veracityKey={statement.assessment.veracity.key} />
-                  <StatementResult>{statement.assessment.veracity.name}</StatementResult>
+                  <StatementResult veracityKey={statement.assessment.veracity.key}>
+                    {statement.assessment.veracity.name}
+                  </StatementResult>
                   <StatementExplanationLink href={`https://demagog.cz/vyrok/${statement.id}`} target="_blank">odůvodnění</StatementExplanationLink>
                 </StatementResultExplanationWrapper>
               </StatementContentContainer>
@@ -259,6 +261,7 @@ const StatementsContainer = styled.div`
 `
 
 const StatementContainer = styled.div`
+  margin: 5px 0;
   padding: 10px 0;
   display: flex;
   flex-direction: row;
@@ -266,7 +269,7 @@ const StatementContainer = styled.div`
 `
 
 const StatementTimeContainer = styled.div`
-	flex: 0 55px;
+	flex: 0 0 45px;
   padding-left: 10px;
 	text-align: left;
 `
@@ -313,6 +316,7 @@ const StatementResult = styled.span`
 	font-size: 12px;
   line-height: 13px;
   padding-left: 4px;
+  color: ${props => VERACITY_COLORS[props.veracityKey]};
 `
 
 const StatementExplanationLink = styled.a`

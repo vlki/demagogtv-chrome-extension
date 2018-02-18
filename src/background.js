@@ -4,6 +4,7 @@ import {
   ARTICLE_STATEMENTS_TIMINGS,
   ARTICLE_URL_PREFIX_MAP
 } from './data'
+import { parseTime } from './utils'
 
 const apolloFetch = createApolloFetch({ uri: 'https://demagog.cz/graphql' })
 
@@ -71,6 +72,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
         return carry
       }, [])
+
+      article.statements = article.statements.sort(
+        (a, b) => parseTime(a.timeStart) - parseTime(b.timeStart))
 
       sendResponse({ article })
     })
