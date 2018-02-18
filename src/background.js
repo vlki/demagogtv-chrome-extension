@@ -32,6 +32,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const graphqlQuery = `{
     article(slug: "${articleSlug}") {
       slug,
+      speakers {
+        id,
+        first_name,
+        last_name,
+        portrait
+      },
       statements {
         id,
         content,
@@ -41,6 +47,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         },
         assessment {
           veracity {
+            key,
             name
           }
         }

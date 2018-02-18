@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
+import VeracityIcon from './VeracityIcon'
 import { parseTime } from './utils'
 
 class StatementsPanel extends Component {
@@ -64,7 +65,34 @@ class StatementsPanel extends Component {
 
     return (
       <Container>
-				<Title>Demagog.cz</Title>
+        {article.speakers.map(speaker =>
+          <SpeakerContainer key={speaker.id}>
+            <SpeakerPortraitWrapper>
+              <img src={'https://demagog.cz' + speaker.portrait} />
+            </SpeakerPortraitWrapper>
+            <SpeakerTextContainer>
+              <SpeakerName>{speaker.first_name + ' ' + speaker.last_name}</SpeakerName>
+              <SpeakerStats>
+                <SpeakerStatButton>
+                  <VeracityIcon veracityKey="true" />
+                  <VeracityNumber>1</VeracityNumber>
+                </SpeakerStatButton>
+                <SpeakerStatButton>
+                  <VeracityIcon veracityKey="untrue" />
+                  <VeracityNumber>1</VeracityNumber>
+                </SpeakerStatButton>
+                <SpeakerStatButton>
+                  <VeracityIcon veracityKey="misleading" />
+                  <VeracityNumber>1</VeracityNumber>
+                </SpeakerStatButton>
+                <SpeakerStatButton>
+                  <VeracityIcon veracityKey="unverifiable" />
+                  <VeracityNumber>1</VeracityNumber>
+                </SpeakerStatButton>
+              </SpeakerStats>
+            </SpeakerTextContainer>
+          </SpeakerContainer>
+        )}
         <StatementsContainer innerRef={el => { this.statementsContainerEl = el }}>
           {article.statements.map(statement =>
             <StatementContainer
@@ -78,10 +106,12 @@ class StatementsPanel extends Component {
               <StatementContentContainer>
                 <StatementText
                   dangerouslySetInnerHTML={{
-                    __html: statement.speaker.first_name + ' ' + statement.speaker.last_name + ': „' + statement.content + '“'
+                    __html: '<strong>' + statement.speaker.first_name + ' ' + statement.speaker.last_name + '</strong>'
+                        + ': „' + statement.content + '“'
                   }}
                 />
                 <StatementResultExplanationWrapper>
+                  <StatementResultIcon veracityKey={statement.assessment.veracity.key} />
                   <StatementResult>{statement.assessment.veracity.name}</StatementResult>
                   <StatementExplanationLink href={`https://demagog.cz/vyrok/${statement.id}`} target="_blank">odůvodnění</StatementExplanationLink>
                 </StatementResultExplanationWrapper>
@@ -89,6 +119,12 @@ class StatementsPanel extends Component {
             </StatementContainer>
           )}
         </StatementsContainer>
+        <Footer>
+          <DebateLink href={`https://demagog.cz/diskuze/${article.slug}`}>Celý rozbor debaty na Demagog.cz »</DebateLink>
+          <DemagogLogoLink href="https://demagog.cz">
+            <img src={chrome.runtime.getURL('/demagog.png')} alt="Demagog.cz" />
+          </DemagogLogoLink>
+        </Footer>
       </Container>
     )
   }
@@ -96,36 +132,98 @@ class StatementsPanel extends Component {
 
 const Container = styled.div`
 	margin: 0 0 10px 10px;
-	padding: 10px;
+  padding: 10px 0 0 0;
 	background-color: white;
 `
 
-const Title = styled.h2`
-	font-size: 20px;
-	font-weight: normal;
-	margin: 0 0 22px 0;
-	padding: 0;
+const SpeakerContainer = styled.div`
+  display: flex;
+  margin: 0 10px 10px 10px;
+`
+
+const SpeakerPortraitWrapper = styled.div`
+  width: 36px;
+  height: 36px;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  overflow: hidden;
+`
+
+const SpeakerTextContainer = styled.div`
+  margin-left: 10px;
+`
+
+const SpeakerName = styled.span`
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: bold;
+`
+
+const SpeakerStats = styled.div`
+  margin-top: 3px;
+  display: flex;
+`
+
+const SpeakerStatButton = styled.button`
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  display: flex;
+  font-family: Verdana, Arial, sans-serif;
+  text-align: left;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`
+
+const VeracityNumber = styled.span`
+  display: inline-block;
+  width: 20px;
+  padding-left: 4px;
+  font-size: 12px;
+  line-height: 13px;
 `
 
 const StatementsContainer = styled.div`
-  height: 600px;
-  margin-left: -10px;
-	margin-right: -10px;
+  height: 640px;
   overflow: auto;
   position: relative;
+  border-top: 1px solid #CCCCCC;
+  border-bottom: 1px solid #CCCCCC;
+
+  background:
+  /* Shadow covers */
+  linear-gradient(white 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
+  /* Shadows */
+  radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
+  background:
+  /* Shadow covers */
+  linear-gradient(white 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
+  /* Shadows */
+  radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
 `
 
 const StatementContainer = styled.div`
-	margin-bottom: 15px;
   padding: 10px 0;
-	display: flex;
-	flex-direction: row;
-  background: ${props => props.highlight ? '#FAE4DD' : 'transparent'};
+  display: flex;
+  flex-direction: row;
+  background: ${props => props.highlight ? '#e1f7ff' : 'transparent'};
 `
 
 const StatementTimeContainer = styled.div`
-	flex: 0 52px;
-	text-align: center;
+	flex: 0 55px;
+  padding-left: 10px;
+	text-align: left;
 `
 
 const StatementContentContainer = styled.div`
@@ -140,9 +238,14 @@ const StatementTimeButton = styled.button`
 	border: 0;
   background: none;
 	font-size: 12px;
+  line-height: 18px;
 	color: #008CBB;
 	text-decoration: underline;
 	cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+  }
 `
 
 const StatementText = styled.p`
@@ -150,19 +253,49 @@ const StatementText = styled.p`
 `
 
 const StatementResultExplanationWrapper = styled.div`
-	margin-top: 6px;
+	margin-top: 10px;
+  display: flex;
+`
+
+const StatementResultIcon = styled(VeracityIcon)`
 `
 
 const StatementResult = styled.span`
 	font-weight: bold;
-	font-size: 13px;
+	font-size: 12px;
+  line-height: 13px;
+  padding-left: 4px;
 `
 
 const StatementExplanationLink = styled.a`
 	margin-left: 10px;
 	font-size: 12px;
+  line-height: 13px;
 	color: #008CBB;
 	text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+`
+
+const Footer = styled.div`
+  padding: 10px;
+`
+
+const DebateLink = styled.a`
+	font-size: 12px;
+	color: #008CBB;
+	text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+`
+
+const DemagogLogoLink = styled.a`
+  display: block;
+  margin-top: 10px;
 `
 
 export default StatementsPanel

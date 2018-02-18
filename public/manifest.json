@@ -35,5 +35,8 @@
   ],
   "permissions": [
     "http://www.ceskatelevize.cz/*"
+  ],
+  "web_accessible_resources": [
+    "demagog.png"
   ]
 }
