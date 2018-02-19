@@ -1,6 +1,15 @@
 {
   "name": "demagogtv-chrome-extension",
-  "version": "1.0.1",
+  "version": "1.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:vlki/demagogtv-chrome-extension.git"
+  },
+  "author": {
+    "name": "Jan Vlček",
+    "email": "jan.vlcek@vlki.cz"
+  },
   "scripts": {
     "start": "NODE_ENV=development webpack --config webpack.config.js --watch",
     "build": "npm run build-webpack && npm run build-compress",
@@ -9,6 +18,7 @@
     "generate-signing-key": "crx keygen",
     "clean": "rimraf build/ dev/ *.crx *.zip"
   },
+  "dependencies": {},
   "devDependencies": {
     "apollo-fetch": "^0.7.0",
     "babel-core": "^6.26.0",
@@ -19,6 +29,7 @@
     "crx": "^3.2.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "rimraf": "^2.6.2",
     "styled-components": "^3.1.6",
     "webpack": "^3.11.0",
     "webpack-chrome-extension-reloader": "^0.7.0"
@@ -30,8 +41,5 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  },
-  "dependencies": {
-    "rimraf": "^2.6.2"
   }
 }

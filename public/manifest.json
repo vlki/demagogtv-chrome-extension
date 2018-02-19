@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "DemagogTV",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Sledujte rozhovor a zároveň, zda politik říká pravdu či ne. Videozáznamy debat propojené s hodnocením výroků od Demagog.cz.",
   "icons": {
     "128": "icon128.png",
