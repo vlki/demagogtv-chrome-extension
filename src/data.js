@@ -119,6 +119,10 @@ export const ARTICLE_STATEMENTS_TIMINGS = {
     '16351': {
       start: '31:03',
       end: '31:10'
+    },
+    '16352': {
+      start: '31:32',
+      end: '31:44'
     }
   }
 }
